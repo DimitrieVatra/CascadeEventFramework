@@ -33,7 +33,8 @@ public class Lesson
 ```
 To maintain the University.ActiveLesson updated, you would need to subscribe to the entire hierachy of the model, and propagate the events and implement very much logic around it.
 
-Solution: No more subscribing and unsubscribing to events. It can lead to bugs and many errors. Instead, CascadeEventFramework automatically does the event binding for you, and updates it upon every collection and item changes.
+## Solution:
+No more subscribing and unsubscribing to events. It can lead to bugs and many errors. Instead, CascadeEventFramework automatically does the event binding for you, and updates it upon every collection and item changes.
 
 1. None of the intermediate classes need to subscribe to anything, the cascading is maintained automatically
 ```csharp
@@ -115,3 +116,254 @@ public class University : Item
 }
 
 ```
+
+
+
+
+## Classical implementation
+  
+Following there is a classical implementation of the model above, but I eliminated some of the functionality to make it smaller, as it would have been too long:
+<details>
+  <summary>Expand here to check the classical equivalent of the code above</summary>
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+
+public class University : INotifyPropertyChanged
+{
+    private string _name;
+    private Class _activeClass;
+    private Lesson _activeLesson;
+
+    public string Name
+    {
+        get => _name;
+        set
+        {
+            if (_name != value)
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
+    }
+
+    public Class ActiveClass
+    {
+        get => _activeClass;
+        set
+        {
+            if (_activeClass != value)
+            {
+                if (_activeClass != null)
+                {
+                    _activeClass.PropertyChanged -= ActiveClass_PropertyChanged;
+                }
+
+                _activeClass = value;
+                _activeClass.PropertyChanged += ActiveClass_PropertyChanged;
+                UpdateActiveLesson();
+            }
+        }
+    }
+
+    public Lesson ActiveLesson
+    {
+        get => _activeLesson;
+        set
+        {
+            if (_activeLesson != value)
+            {
+                if (_activeLesson != null)
+                {
+                    _activeLesson.PropertyChanged -= ActiveLesson_PropertyChanged;
+                }
+
+                _activeLesson = value;
+
+                if (_activeLesson != null)
+                {
+                    _activeLesson.PropertyChanged += ActiveLesson_PropertyChanged;
+                }
+
+                ActiveLessonChanged?.Invoke(this, _activeLesson);
+            }
+        }
+    }
+
+    public event EventHandler<Lesson> ActiveLessonChanged;
+    public event EventHandler<Class> ActiveClassRenamed;
+    public event EventHandler<Course> ActiveCourseRenamed;
+    public event EventHandler<Lesson> LessonRenamed;
+    public List<Class> Classes { get; set; }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    private void ActiveClass_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Class.ActiveCourse))
+        {
+            UpdateActiveLesson();
+        }
+        else if (e.PropertyName == nameof(Class.Name))
+        {
+            ActiveClassRenamed?.Invoke(this, _activeClass);
+        }
+    }
+
+    private void UpdateActiveLesson()
+    {
+        ActiveLesson = _activeClass?.ActiveCourse?.ActiveLesson;
+    }
+
+    private void ActiveLesson_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Lesson.Name))
+        {
+            LessonRenamed?.Invoke(this, _activeLesson);
+        }
+    }
+
+    protected void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+}
+
+public class Class : INotifyPropertyChanged
+{
+    private string _name;
+    private Course _activeCourse;
+
+    public string Name
+    {
+        get => _name;
+        set
+        {
+            if (_name != value)
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
+    }
+
+    public Course ActiveCourse
+    {
+        get => _activeCourse;
+        set
+        {
+            if (_activeCourse != value)
+            {
+                if (_activeCourse != null)
+                {
+                    _activeCourse.PropertyChanged -= ActiveCourse_PropertyChanged;
+                }
+
+                _activeCourse = value;
+
+                if (_activeCourse != null)
+                {
+                    _activeCourse.PropertyChanged += ActiveCourse_PropertyChanged;
+                }
+
+                OnPropertyChanged(nameof(ActiveCourse));
+            }
+        }
+    }
+
+    public List<Course> Courses { get; set; }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    private void ActiveCourse_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Course.ActiveLesson))
+        {
+            OnPropertyChanged(nameof(ActiveCourse));
+        }
+        else if (
+        else if (e.PropertyName == nameof(Course.Name))
+        {
+            OnPropertyChanged(nameof(Course.Name));
+        }
+    }
+
+    protected void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+}
+
+public class Course : INotifyPropertyChanged
+{
+    private string _name;
+    private Lesson _activeLesson;
+
+    public string Name
+    {
+        get => _name;
+        set
+        {
+            if (_name != value)
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
+    }
+
+    public Lesson ActiveLesson
+    {
+        get => _activeLesson;
+        set
+        {
+            if (_activeLesson != value)
+            {
+                _activeLesson = value;
+                OnPropertyChanged(nameof(ActiveLesson));
+            }
+        }
+    }
+
+    public List<Lesson> Lessons { get; set; }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+}
+
+public class Lesson : INotifyPropertyChanged
+{
+    private string _name;
+
+    public string Name
+    {
+        get => _name;
+        set
+        {
+            if (_name != value)
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+}
+
+
+```
+
+</details>
