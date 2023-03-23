@@ -125,8 +125,8 @@ namespace CascadeEventFramework
             subitemsEvents.SubscribeToEvents(collection);
             collection.Items.ToList().ForEach(i => SubscribeToItem(i));
 
-            collection.SubitemAdded += (s, e) => SubscribeToItem(e.Item);
-            collection.SubitemRemoved += (s, e) => UnsubscribeFromItem(e.Item);
+            collection.ItemAdded += (s, e) => SubscribeToItem(e.Item);
+            collection.ItemRemoved += (s, e) => UnsubscribeFromItem(e.Item);
         }
         protected void SubscribeToItem(Item item)
         {

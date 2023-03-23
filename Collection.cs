@@ -7,11 +7,11 @@ namespace CascadeEventFramework
 {
     public class Collection<ItemType, ParentType> : ICollectionEvents where ItemType : Item<ParentType> where ParentType : Item
     {
-        public event EventHandler<ItemEventArgs> SubitemAdded;
-        public event EventHandler<ItemEventArgs> SubitemRemoved;
-        public event EventHandler<ItemEventArgs> BeforeSubitemUpdated;
-        public event EventHandler<ItemEventArgs> SubitemUpdated;
-        public event EventHandler<ChildrenSwappedEventArgs> SubitemPositionChanged;
+        public event EventHandler<ItemEventArgs> ItemAdded;
+        public event EventHandler<ItemEventArgs> ItemRemoved;
+        public event EventHandler<ItemEventArgs> BeforeItemUpdated;
+        public event EventHandler<ItemEventArgs> ItemUpdated;
+        public event EventHandler<ChildrenSwappedEventArgs> ItemPositionChanged;
 
         private ObservableCollection<ItemType> _items;
         ParentType Parent;
@@ -37,7 +37,7 @@ namespace CascadeEventFramework
                     newItem.PropertyChanged += OnItemPropertyChanged;
                     newItem.BeforeUpdated += OnBeforeItemUpdated;
 
-                    SubitemAdded?.Invoke(this, new ItemEventArgs(newItem));
+                    ItemAdded?.Invoke(this, new ItemEventArgs(newItem));
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
@@ -46,7 +46,7 @@ namespace CascadeEventFramework
                 {
                     oldItem.PropertyChanged -= OnItemPropertyChanged;
                     oldItem.BeforeUpdated -= OnBeforeItemUpdated;
-                    SubitemRemoved?.Invoke(this, new ItemEventArgs(oldItem));
+                    ItemRemoved?.Invoke(this, new ItemEventArgs(oldItem));
                 }
             }
         }
@@ -60,14 +60,14 @@ namespace CascadeEventFramework
             }
             else
             {
-                SubitemUpdated?.Invoke(this, new ItemEventArgs(item));
+                ItemUpdated?.Invoke(this, new ItemEventArgs(item));
             }
         }
 
         private void OnBeforeItemUpdated(object sender, BeforeUpdatedEventArgs e)
         {
             ItemType item = (ItemType)sender;
-            BeforeSubitemUpdated?.Invoke(this, new ItemEventArgs(item));
+            BeforeItemUpdated?.Invoke(this, new ItemEventArgs(item));
         }
 
         private void ReorderItems(ItemType changedItem)
@@ -83,7 +83,7 @@ namespace CascadeEventFramework
             {
                 Items.Insert(newIndex, changedItem);
             }
-            SubitemPositionChanged?.Invoke(this, new ChildrenSwappedEventArgs(oldIndex, newIndex));
+            ItemPositionChanged?.Invoke(this, new ChildrenSwappedEventArgs(oldIndex, newIndex));
         }
     }
 }

@@ -3,25 +3,25 @@
     public delegate void CovariantEventHandler<out ItemType>(object sender, Item eventArgs) where ItemType : Item;
     public interface ICollectionEvents
     {
-        event EventHandler<ItemEventArgs> SubitemAdded;
-        event EventHandler<ItemEventArgs> SubitemRemoved;
-        event EventHandler<ItemEventArgs> BeforeSubitemUpdated;
-        event EventHandler<ItemEventArgs> SubitemUpdated;
-        event EventHandler<ChildrenSwappedEventArgs> SubitemPositionChanged;
+        event EventHandler<ItemEventArgs> ItemAdded;
+        event EventHandler<ItemEventArgs> ItemRemoved;
+        event EventHandler<ItemEventArgs> BeforeItemUpdated;
+        event EventHandler<ItemEventArgs> ItemUpdated;
+        event EventHandler<ChildrenSwappedEventArgs> ItemPositionChanged;
     }
     public class CollectionEvents<ItemType> where ItemType : Item
     {
 
-        public event EventHandler<ItemEventArgs<ItemType>> SubitemAdded;
-        public event EventHandler<ItemEventArgs<ItemType>> SubitemRemoved;
-        public event EventHandler<ItemEventArgs<ItemType>> BeforeSubitemUpdated;
-        public event EventHandler<ItemEventArgs<ItemType>> SubitemUpdated;
+        public event EventHandler<ItemEventArgs<ItemType>> ItemAdded;
+        public event EventHandler<ItemEventArgs<ItemType>> ItemRemoved;
+        public event EventHandler<ItemEventArgs<ItemType>> BeforeItemUpdated;
+        public event EventHandler<ItemEventArgs<ItemType>> ItemUpdated;
         public CollectionEvents(CollectionEvents holder)
         {
-            holder.SubitemAdded += (s, e) => SubitemAdded?.Invoke(s, new ItemEventArgs<ItemType>(e));
-            holder.SubitemRemoved += (s, e) => SubitemRemoved?.Invoke(s, new ItemEventArgs<ItemType>(e));
-            holder.BeforeSubitemUpdated += (s, e) => BeforeSubitemUpdated?.Invoke(s, new ItemEventArgs<ItemType>(e));
-            holder.SubitemUpdated += (s, e) => SubitemUpdated?.Invoke(s, new ItemEventArgs<ItemType>(e));
+            holder.ItemAdded += (s, e) => ItemAdded?.Invoke(s, new ItemEventArgs<ItemType>(e));
+            holder.ItemRemoved += (s, e) => ItemRemoved?.Invoke(s, new ItemEventArgs<ItemType>(e));
+            holder.BeforeItemUpdated += (s, e) => BeforeItemUpdated?.Invoke(s, new ItemEventArgs<ItemType>(e));
+            holder.ItemUpdated += (s, e) => ItemUpdated?.Invoke(s, new ItemEventArgs<ItemType>(e));
         }
     }
     public class CollectionEvents : ICollectionEvents
@@ -32,34 +32,34 @@
         {
             Holder = holder;
         }
-        public virtual event EventHandler<ItemEventArgs> SubitemAdded;
-        public virtual event EventHandler<ItemEventArgs> SubitemRemoved;
-        public virtual event EventHandler<ItemEventArgs> BeforeSubitemUpdated;
-        public virtual event EventHandler<ItemEventArgs> SubitemUpdated;
+        public virtual event EventHandler<ItemEventArgs> ItemAdded;
+        public virtual event EventHandler<ItemEventArgs> ItemRemoved;
+        public virtual event EventHandler<ItemEventArgs> BeforeItemUpdated;
+        public virtual event EventHandler<ItemEventArgs> ItemUpdated;
         public virtual event EventHandler<ItemEventArgs> ActiveSubitemChanged;
-        public virtual event EventHandler<ChildrenSwappedEventArgs> SubitemPositionChanged;
+        public virtual event EventHandler<ChildrenSwappedEventArgs> ItemPositionChanged;
         public void SubscribeToEvents(ICollectionEvents events)
         {
-            events.SubitemAdded += Events_SubitemAdded;
-            events.SubitemRemoved += Events_SubitemRemoved;
-            events.SubitemUpdated += Events_SubitemUpdated;
-            events.BeforeSubitemUpdated += Events_BeforeSubitemUpdated;
-            events.SubitemPositionChanged += Events_SubitemPositionChanged;
+            events.ItemAdded += Events_SubitemAdded;
+            events.ItemRemoved += Events_SubitemRemoved;
+            events.ItemUpdated += Events_SubitemUpdated;
+            events.BeforeItemUpdated += Events_BeforeSubitemUpdated;
+            events.ItemPositionChanged += Events_SubitemPositionChanged;
         }
         public void UnsubscribeFromEvents(ICollectionEvents events)
         {
-            events.SubitemAdded -= Events_SubitemAdded;
-            events.SubitemRemoved -= Events_SubitemRemoved;
-            events.SubitemUpdated -= Events_SubitemUpdated;
-            events.BeforeSubitemUpdated -= Events_BeforeSubitemUpdated;
-            events.SubitemPositionChanged -= Events_SubitemPositionChanged;
+            events.ItemAdded -= Events_SubitemAdded;
+            events.ItemRemoved -= Events_SubitemRemoved;
+            events.ItemUpdated -= Events_SubitemUpdated;
+            events.BeforeItemUpdated -= Events_BeforeSubitemUpdated;
+            events.ItemPositionChanged -= Events_SubitemPositionChanged;
         }
-        private void Events_SubitemPositionChanged(object sender, ChildrenSwappedEventArgs e) => SubitemPositionChanged?.Invoke(sender, e.Stack(Holder));
+        private void Events_SubitemPositionChanged(object sender, ChildrenSwappedEventArgs e) => ItemPositionChanged?.Invoke(sender, e.Stack(Holder));
         private void Events_ActiveSubitemChanged(object sender, ItemEventArgs e) => ActiveSubitemChanged?.Invoke(sender, e.Stack(Holder));
-        private void Events_BeforeSubitemUpdated(object sender, ItemEventArgs e) => BeforeSubitemUpdated?.Invoke(sender, e.Stack(Holder));
-        private void Events_SubitemUpdated(object sender, ItemEventArgs e) => SubitemUpdated?.Invoke(sender, e.Stack(Holder));
-        private void Events_SubitemRemoved(object sender, ItemEventArgs e) => SubitemRemoved?.Invoke(sender, e.Stack(Holder));
-        private void Events_SubitemAdded(object sender, ItemEventArgs e) => SubitemAdded?.Invoke(sender, e.Stack(Holder));
+        private void Events_BeforeSubitemUpdated(object sender, ItemEventArgs e) => BeforeItemUpdated?.Invoke(sender, e.Stack(Holder));
+        private void Events_SubitemUpdated(object sender, ItemEventArgs e) => ItemUpdated?.Invoke(sender, e.Stack(Holder));
+        private void Events_SubitemRemoved(object sender, ItemEventArgs e) => ItemRemoved?.Invoke(sender, e.Stack(Holder));
+        private void Events_SubitemAdded(object sender, ItemEventArgs e) => ItemAdded?.Invoke(sender, e.Stack(Holder));
     }
     public interface IItemEvents
     {
