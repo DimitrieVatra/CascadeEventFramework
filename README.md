@@ -93,7 +93,7 @@ public class University : Item
         //Fires for all the objects in the Classes collection. When an object is removed from the colelction, this event will not folow it anymore. Also newly added objects will be included in this event
         ClassesEvents.ItemUpdated += ClassesEvents_SubitemUpdated;
 
-        //Fires for all the courses in all the classes in the Classes collection. No need to subscribe and unsubscribe to and from each Course of each Class upon every collection change
+        //Fires for all the lessons in all the courses in the Classes collection. No need to subscribe and unsubscribe to and from each Course of each Class upon every collection change
         LessonsEvents.ItemUpdated += LessonsEvents_ItemUpdated;
 
         //Fires Automatically for the ActiveClass.ActiveCourse.ActiveLesson property. When the ActiveClass or ActiveCourse or ActiveLesson changes, the event will follow the updated refference
