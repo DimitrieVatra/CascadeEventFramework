@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="HierarchyScope.cs" />
+  </ItemGroup>
+
 </Project>
