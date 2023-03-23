@@ -1,4 +1,4 @@
-﻿namespace EventCascadeFramework
+﻿namespace CascadeEventFramework
 {
     public delegate void CovariantEventHandler<out ItemType>(object sender, Item eventArgs) where ItemType : Item;
     public interface ICollectionEvents

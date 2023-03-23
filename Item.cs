@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Reflection;
 
-namespace EventCascadeFramework
+namespace CascadeEventFramework
 {
     public abstract class Item<ParentType> : Item where ParentType : Item
     {

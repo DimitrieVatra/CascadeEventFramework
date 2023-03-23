@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace EventCascadeFramework
+namespace CascadeEventFramework
 {
     public class BeforeUpdatedEventArgs : ItemEventArgs
     {

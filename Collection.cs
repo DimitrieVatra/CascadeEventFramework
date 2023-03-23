@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
-namespace EventCascadeFramework
+namespace CascadeEventFramework
 {
     public class Collection<ItemType, ParentType> : ICollectionEvents where ItemType : Item<ParentType> where ParentType : Item
     {

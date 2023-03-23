@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace EventCascadeFramework
+namespace CascadeEventFramework
 {
     public class ObservableDictionary<TKey, TValue> : ObservableCollection<KeyValuePair<TKey, TValue>>
     {
