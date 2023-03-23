@@ -9,8 +9,8 @@ namespace CascadeEventFramework
     {
         public event EventHandler<ItemEventArgs> ItemAdded;
         public event EventHandler<ItemEventArgs> ItemRemoved;
-        public event EventHandler<ItemEventArgs> BeforeItemUpdated;
-        public event EventHandler<ItemEventArgs> ItemUpdated;
+        public event EventHandler<ItemWithPropertyEventArgs> BeforeItemUpdated;
+        public event EventHandler<ItemWithPropertyEventArgs> ItemUpdated;
         public event EventHandler<ChildrenSwappedEventArgs> ItemPositionChanged;
 
         private ObservableCollection<ItemType> _items;
@@ -60,14 +60,15 @@ namespace CascadeEventFramework
             }
             else
             {
-                ItemUpdated?.Invoke(this, new ItemEventArgs(item));
+                var property = sender.GetType().GetProperty(e.PropertyName);
+                ItemUpdated?.Invoke(this, new ItemWithPropertyEventArgs(item, property));
             }
         }
 
         private void OnBeforeItemUpdated(object sender, BeforeUpdatedEventArgs e)
         {
             ItemType item = (ItemType)sender;
-            BeforeItemUpdated?.Invoke(this, new ItemEventArgs(item));
+            BeforeItemUpdated?.Invoke(this, new ItemWithPropertyEventArgs(item, e.PropertyInfo));
         }
 
         private void ReorderItems(ItemType changedItem)
