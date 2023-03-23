@@ -10,4 +10,11 @@
     <Compile Remove="HierarchyScope.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove=".gitattributes" />
+    <None Remove=".gitignore" />
+    <None Remove="LICENSE.txt" />
+    <None Remove="README.md" />
+  </ItemGroup>
+
 </Project>
