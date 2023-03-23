@@ -26,6 +26,7 @@ namespace CascadeEventFramework
     }
     public class ItemWithPropertyEventArgs<ItemType> : ItemWithPropertyEventArgs, IItemEventArgs<ItemType> where ItemType : Item
     {
+        public new ItemType Item { get => base.Item as ItemType; private set => base.Item = value; }
         public ItemWithPropertyEventArgs(ItemWithPropertyEventArgs args) : base(args.Item, args.property)
         {
             InvokeHistory = args.InvokeHistory;
