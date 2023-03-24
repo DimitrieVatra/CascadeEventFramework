@@ -55,7 +55,7 @@ public class Course : Item<Class>
     string _name;
     Lesson _activeLesson;
     public string Name { get => _name; set => SetField(ref _name, value, nameof(Name)); }
-    public Lesson ActiveLesson { get => _activeCourse; set => SetField(ref _activeCourse, value, nameof(ActiveLesson)); }
+    public Lesson ActiveLesson { get => _activeLesson; set => SetField(ref _activeCourse, value, nameof(ActiveLesson)); }
     public Collection<Lesson, Course> Lessons { get; set; }
     public Course()
     {
@@ -77,7 +77,7 @@ public class Lesson : Item<Course>
 public class University : Item
 {
     Lesson _activeLesson;
-    public Lesson ActiveLesson { get => _activeCourse; set => SetField(ref _activeCourse, value, nameof(ActiveLesson)); }
+    public Lesson ActiveLesson { get => _activeLesson; set => SetField(ref _activeCourse, value, nameof(ActiveLesson)); }
     public Collection<Class, University> Classes { get; }
     public CollectionEvents<Class> ClassesEvents { get; }
     public CollectionEvents<Lesson> LessonsEvents { get; }
