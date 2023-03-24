@@ -53,9 +53,9 @@ public class Class : Item<University>
 public class Course : Item<Class>
 {
     string _name;
-    Course _activeCourse;
+    Lesson _activeLesson;
     public string Name { get => _name; set => SetField(ref _name, value, nameof(Name)); }
-    public Course ActiveCourse { get => _activeCourse; set => SetField(ref _activeCourse, value, nameof(ActiveCourse)); }
+    public Lesson ActiveLesson { get => _activeCourse; set => SetField(ref _activeCourse, value, nameof(ActiveLesson)); }
     public Collection<Lesson, Course> Lessons { get; set; }
     public Course()
     {
@@ -76,7 +76,8 @@ public class Lesson : Item<Course>
 ```csharp
 public class University : Item
 {
-    public Lesson ActiveLesson { get;set; }
+    Lesson _activeLesson;
+    public Lesson ActiveLesson { get => _activeCourse; set => SetField(ref _activeCourse, value, nameof(ActiveLesson)); }
     public Collection<Class, University> Classes { get; }
     public CollectionEvents<Class> ClassesEvents { get; }
     public CollectionEvents<Lesson> LessonsEvents { get; }
@@ -112,7 +113,11 @@ public class University : Item
         Debug.WriteLine($"The class {e.Item.Name} from the collection Classes has been updated");
         Debug.WriteLine($"Updated property: {e.Property.Name})");
     }
-    private void ActiveLessonEvents_Updated(object sender, ItemWithPropertyEventArgs<Lesson> e) => ActiveLesson = e.Item;
+    private void ActiveLessonEvents_Updated(object sender, ItemWithPropertyEventArgs<Lesson> e)
+    {
+        //e.Item.Name is always equal to the ActiveLesson property, and this events always invokes for the Lesson refference which is currently the ActiveLesson
+        Debug.WriteLine($"The currently active lesson has been renamed to {e.Item.Name} ");
+    }
 }
 
 ```
