@@ -103,7 +103,7 @@ public class University : Item
 
     private void LessonsEvents_ItemUpdated(object sender, ItemWithPropertyEventArgs<Lesson> e)
     {
-        Debug.WriteLine($"The lesson {e.Item.Name} of the class {e.Item.Parent.Name} of the class {e.Item.Parent.Parent.Name} from the collection Classes has been updated");
+        Debug.WriteLine($"The lesson {e.Item.Name} of the course {e.Item.Parent.Name} of the class {e.Item.Parent.Parent.Name} from the collection Classes has been updated");
         Debug.WriteLine($"Updated property: {e.Property.Name})");
     }
 
