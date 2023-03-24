@@ -284,7 +284,6 @@ public class Class : INotifyPropertyChanged
         {
             OnPropertyChanged(nameof(ActiveCourse));
         }
-        else if (
         else if (e.PropertyName == nameof(Course.Name))
         {
             OnPropertyChanged(nameof(Course.Name));
