@@ -84,7 +84,7 @@ namespace CascadeEventFramework
             {
                 Items.Insert(newIndex, changedItem);
             }
-            ItemPositionChanged?.Invoke(this, new ChildrenSwappedEventArgs(oldIndex, newIndex));
+            ItemPositionChanged?.Invoke(this, new ChildrenSwappedEventArgs(changedItem, oldIndex, newIndex));
         }
     }
 }

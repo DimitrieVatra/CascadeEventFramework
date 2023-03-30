@@ -72,10 +72,12 @@ namespace CascadeEventFramework
     }
     public class ChildrenSwappedEventArgs : InvokeHistoyEventArgs
     {
+        public Item Item { get; }
         public int OldIndex { get; private set; }
         public int NewIndex { get; private set; }
-        public ChildrenSwappedEventArgs(int oldIndex, int newIndex)
+        public ChildrenSwappedEventArgs(Item item, int oldIndex, int newIndex)
         {
+            Item = item;
             OldIndex = oldIndex;
             NewIndex = newIndex;
         }
